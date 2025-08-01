@@ -1,2 +1,3 @@
 # Signora
-A sign Language teaching App
+A Sign Language Learning App
+-S5 AWT Project
