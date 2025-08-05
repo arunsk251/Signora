@@ -16,3 +16,5 @@ to move to branch : git checkout <branch_name>
 push: 1. git add .
       2. git commit -m "<give some message>"
       3. git push
+
+increased buffer size : git config --global http.postBuffer 524288000
