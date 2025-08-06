@@ -2,7 +2,7 @@
   "name": "signora",
   "version": "1.0.0",
   "description": "A sign Language teaching App",
-  "main": "app.js",
+  "main": "servers",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js"
