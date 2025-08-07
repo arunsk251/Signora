@@ -26,4 +26,27 @@ router.post("/", async(req, res) => {
     }
 });
 
+//Login checkkk
+
+router.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, '../login.html'));
+});
+
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const user = await User.findOne({ email: email });
+        if (!user) {
+            return res.status(400).send('User not found');
+        }
+        if (user.password !== password) {
+            return res.status(401).send('Invalid credentials');
+        }
+        res.send('Login successful!');
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).send('Internal server error');
+    }
+});
+
 module.exports = router;
