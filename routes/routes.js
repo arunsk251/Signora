@@ -19,7 +19,8 @@ router.post("/", async(req, res) => {
         });
         await newUser.save();
         // Redirect to a success page or send a success message
-        res.send("Registration successful!");
+        alert("Sucessfully Registered");
+        res.redirect("/home.html");
     } catch(err) {
         console.error('Error saving user data', err);
         res.status(500).send('Error saving user data');
