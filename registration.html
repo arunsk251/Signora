@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <link rel="stylesheet" href="login.css" />
 </head>
+
 <body>
     <div class="container">
         <div class="top"></div>
@@ -17,6 +19,10 @@
                 <input type="email" placeholder="Email" name="email" required />
                 <input type="password" placeholder="Password" name="password" id="password" required />
                 <input type="password" placeholder="Confirm Password" id="confirm_password" required />
+                <label class="show-password">
+                    <input type="checkbox" onclick="togglePasswordVisibility()"> Show Password
+                </label>
+
                 <button type="submit">Register</button>
                 <a href="login.html">
                     <button type="button">Login</button>
@@ -27,16 +33,57 @@
     </div>
 
     <script>
+        function togglePasswordVisibility() {
+            const passwordField = document.getElementById("password");
+            const confirmPasswordField = document.getElementById("confirm_password");
+
+            // Toggle type for both fields
+            const type = passwordField.type === "password" ? "text" : "password";
+            passwordField.type = type;
+            confirmPasswordField.type = type;
+        }
         function validateForm() {
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm_password').value;
 
             if (password !== confirmPassword) {
                 alert('Passwords do not match!');
-                return false; 
+                return false;
             }
-            return true; 
+
+            const minLength = 8;
+            const hasUpperCase = /[A-Z]/.test(password);
+            const hasLowerCase = /[a-z]/.test(password);
+            const hasSpecialChar = /[\W_]/.test(password);
+            const hasNumber = /[\d]/.test(password);
+
+            if (password.length < minLength) {
+                alert("Password must contain atleast 8 characters");
+                return false;
+            }
+            if (!hasUpperCase) {
+                alert("Password must contain an uppercase letter");
+                return false;
+            }
+
+            if (!hasLowerCase) {
+                alert("Password must contain an lowercase letter");
+                return false;
+            }
+            if (!hasNumber) {
+                alert('Password must include at least one number.');
+                return false;
+            }
+
+            if (!hasSpecialChar) {
+                alert('Password must include at least one special character (e.g., @, #, $, %, etc.).');
+                return false;
+            }
+
+            return true; // All checks passed
         }
     </script>
 </body>
+
 </html>
+

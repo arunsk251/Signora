@@ -4,21 +4,23 @@ const path = require('path');
 
 const router = express.Router();
 
-// The GET route should serve the registration.html page
+// The GET route should serve the homepage.html page
 router.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, '../registration.html'));
+    res.sendFile(path.join(__dirname, '../homepage.html'));
 });
 
 // The POST route should handle the form submission
 router.post("/", async(req, res) => {
     try {
+        if(User.findOne(req.body.email)){
+            return res.send("User already exists with this email");
+        }
         const newUser = new User({
             name: req.body.name,
             email: req.body.email,
             password: req.body.password
         });
         await newUser.save();
-        // Redirect to a success page or send a success message
         res.redirect("/home.html");
     } catch(err) {
         console.error('Error saving user data', err);
