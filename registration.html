@@ -33,6 +33,29 @@
     </div>
 
     <script>
+        document.querySelector("form").addEventListener("submit",function(e){
+            e.preventDefault();
+
+            const payload = {
+                name: document.querySelector("[name='name']").value,
+                email: document.querySelector("[name='email']").value,
+                password: document.querySelector("[name='password']").value
+            };
+            fetch("/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.redirectURL){
+                    window.location.href = data.redirectURL;
+                }else if(data.message){
+                    alert(data.message);
+                }
+            })
+            .catch(err => console.error(err));
+        });
         function togglePasswordVisibility() {
             const passwordField = document.getElementById("password");
             const confirmPasswordField = document.getElementById("confirm_password");

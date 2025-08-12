@@ -14,15 +14,17 @@ router.post("/", async(req, res) => {
     try {
         const existingUser = await User.findOne({email: req.body.email});
         if(existingUser){
-            return res.send("User with this email already exists");
+            return res.json({message: "User with this email already exists"});
+            //res.send('User with this email already exists')
         }
+        
         const newUser = new User({
             name: req.body.name,
             email: req.body.email,
             password: req.body.password
         });
         await newUser.save();
-        res.redirect("/home.html");
+        res.json({redirectURL: '/home.html'});
     } catch(err) {
         console.error('Error saving user data', err);
         res.status(500).send('Error saving user data');
