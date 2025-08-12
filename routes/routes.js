@@ -12,8 +12,9 @@ router.get("/", (req, res) => {
 // The POST route should handle the form submission
 router.post("/", async(req, res) => {
     try {
-        if(User.findOne(req.body.email)){
-            return res.send("User already exists with this email");
+        const existingUser = await User.findOne({email: req.body.email});
+        if(existingUser){
+            return res.send("User with this email already exists");
         }
         const newUser = new User({
             name: req.body.name,
