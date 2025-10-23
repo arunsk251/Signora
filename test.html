@@ -1,15 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Test Registration</title>
+  <meta charset="UTF-8">
+  <title>ASL Test – Signora</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?display=swap&family=Lexend:wght@400;500;700;900&family=Noto+Sans:wght@400;500;700;900" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Lexend, "Noto Sans", sans-serif;
+      background-color: #fefefe;
+      color: #f0f3f4;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      align-items: center;
+    }
+
+    header {
+      width: 100%;
+      padding: 1rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #2a2e33;
+    }
+
+    header h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #f0f3f4;
+    }
+
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 960px;
+      padding: 2.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    h2.page-title {
+      font-size: 2rem;
+      font-weight: 700;
+      text-align: center;
+      color: #000000;
+    }
+
+    #prediction {
+      color: #000000;
+      font-weight: 500;
+    }
+
+    .video-container {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    video {
+      width: 640px;
+      height: 480px;
+      border: 2px solid #5227FF;
+      border-radius: 8px;
+      background-color: #000;
+      object-fit: cover;
+      box-shadow: 0 0 20px rgba(82, 39, 255, 0.5);
+    }
+
+    .footer {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: #888;
+      text-align: center;
+    }
+
+    a.back-button {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 0.75rem 1.5rem;
+      background-color: #f0f3f4;
+      color: #111518;
+      text-decoration: none;
+      font-weight: 500;
+      border-radius: 0.5rem;
+      transition: background-color 0.3s ease;
+    }
+    a.back-button:hover {
+      background-color: #dce2e5;
+    }
+    .signora{
+      color: #000000;
+    }
+    .header-left{
+      display: flex;
+    }
+  </style>
 </head>
 <body>
-    <h2>Register</h2>
-    <form method="post" action="/">
-        <input type="text" name="name" placeholder="Full Name" required><br>
-        <input type="email" name="email" placeholder="Email" required><br>
-        <input type="password" name="password" placeholder="Password" required><br>
-        <button type="submit">Register</button>
-    </form>
+  <header>
+    <h2 class="signora">Signora</h2>
+    <nav>
+      <a href="/home.html" class="nav-link">Home</a>
+    </nav>
+  </header>
+  
+
+  <main>
+    <h2 class="page-title">ASL Prediction: <span id="prediction">Waiting...</span></h2>
+    <div class="video-container">
+      <video id="video" autoplay></video>
+    </div>
+    <a href="/home.html" class="back-button">Back to All Lessons</a>
+  </main>
+
+  <div class="footer">© Signora – Learn, Recognize & Test Your ASL Skills</div>
+
+  <script>
+    const video = document.getElementById('video');
+    const predictionDisplay = document.getElementById('prediction');
+    const urlParams = new URLSearchParams(window.location.search);
+    const letter = urlParams.get('letter');
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => { video.srcObject = stream; })
+      .catch(err => console.error("Webcam error:", err));
+
+    async function sendFrame() {
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0);
+      const imageBase64 = canvas.toDataURL('image/jpeg').split(',')[1];
+
+      try {
+        const res = await fetch('http://127.0.0.1:5500/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image: imageBase64 })
+        });
+        const data = await res.json();
+
+        if (data.prediction === letter) {
+          predictionDisplay.textContent = `Correct! The letter is ${data.prediction}`;
+          predictionDisplay.style.color = '#00ff99';
+        } else {
+          predictionDisplay.textContent = `Try Again! Detected: ${data.prediction}`;
+          predictionDisplay.style.color = '#ff4d4d';
+        }
+      } catch (err) {
+        console.error("Prediction error:", err);
+      }
+    }
+
+    setInterval(sendFrame, 1000);
+  </script>
 </body>
 </html>
