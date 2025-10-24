@@ -26,5 +26,40 @@ export const alphabetData = {
     videoUrl: '/videos/Evid.mp4',
     description: 'This is the sign for E. Bend all your fingers in, and rest your thumb across them.',
   },
-  // ... add all other letters here
+
+  yes:
+  {
+    letter: 'Yes',
+    videoUrl: '/videos/Yesvid.mp4',
+    description:'This is the sign for Showing Yes in Sign Language'
+
+  },
+
+  Hello:
+  {
+    letter: 'Hellovid',
+    videoUrl: '/videos/Hellovid.mp4',
+    description:'This is the sign for Showing hello in ASL Sign Language'
+
+  },
+
+  DontKnow:
+{
+  letter: 'DontKnowvid',
+  videoUrl: '/videos/DontKnowvid.mp4',
+  description:'This is the sign for Showing Dont know in ASL Sign Language'
+
+},
+
+  Thankyou:
+  {
+    letter: 'Thankyou',
+    videoUrl: '/videos/Thankyouvid.mp4',
+    description:'This is the sign for Showing Thankyou in ASL Sign Language'
+
+  },
+
+
+
+
 };
